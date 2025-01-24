@@ -18,7 +18,7 @@ def list_products(store_obj):
     if all_products:
         print("\nAvailable products in store:")
         for idx, product in enumerate(all_products, start=1):
-            print(f"{idx}. {product.show()}")  # Updated to use the `show` method
+            print(f"{idx}. {product.show()}")
     else:
         print("\nNo active products in the store.")
 
@@ -68,10 +68,11 @@ def make_order(store_obj):
                 print("Please enter a positive quantity.")
                 continue
 
-            # Check stock and add to shopping list
-            if quantity > product.get_quantity():
-                print(f"Not enough stock for {product.name}. Available quantity: {product.get_quantity()}.")
-                continue
+            # Check stock if it's not a non-stocked product
+            if not isinstance(product, products.NonStockedProduct):
+                if quantity > product.get_quantity():
+                    print(f"Not enough stock for {product.name}. Available quantity: {product.get_quantity()}.")
+                    continue
 
             shopping_list.append((product, quantity))
         except ValueError:

@@ -59,6 +59,16 @@ class NonStockedProduct(Product):
         super().__init__(name, price, quantity=0, promotion=promotion)
         self.active = True
 
+    def get_quantity(self):
+        # Non-stocked product can be considered always available
+        return 9999999999
+
+    def buy(self, quantity):
+        if quantity < 0:
+            raise ValueError("Cannot purchase a negative quantity.")
+        # Do not reduce any quantity; just charge for however many are bought
+        return self.get_price(quantity)
+
     def show(self):
         return f"{self.name} - Price: ${self.price} (Non-stocked), Promotion: {self.promotion.name if self.promotion else 'None'}"
 
